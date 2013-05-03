@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	ofSetFrameRate(60);
 	rmnyTest.Init();
 
 	rmnyTest.do_setup();

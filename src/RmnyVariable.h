@@ -29,18 +29,73 @@ class RmnyVariableBase {
 public:
 	RmnyVariableBase(){
 		type = RMNY_ARG_VOID;
-		value = &instance;
-		*value = 128;
+		value = 128;
 	}
 
 	string name;
 	RmnyArgType type;
-	int instance;
-	int* value;
+	int value;
 
 	virtual void setValue(int val){
-		*value = val;
+		value = val;
 	};
+};
+
+class RmnyVariableConst : public RmnyVariableBase{
+
+};
+
+class RmnyVariableInt : public RmnyVariableConst{
+	RmnyVariableInt(){
+		value = 0;
+	}
+	
+	int value;
+	void setValue(int val){
+		value = val;
+	}
+};
+
+class RmnyVariableFloat : public RmnyVariableConst{
+	RmnyVariableFloat(){
+		value = 0.0f;
+	}
+	float value;
+
+	void setValue(float val){
+		value = val;
+	}
+};
+
+class RmnyVariableString : public RmnyVariableConst{
+	RmnyVariableString(){
+		value ="";
+	}
+	string value;
+
+	void setValue(string val){
+		value = val;
+	}
+};
+
+class RmnyVariableBool : public RmnyVariableConst{
+	RmnyVariableBool(){
+		value = false;
+	}
+	bool value;
+	void setValue(bool val){
+		value = val;
+	}
+};
+
+class RmnyVariableChar : public RmnyVariableConst{
+	RmnyVariableChar(){
+		value = 0x00;
+	}
+	char value;
+	void setValue(char val){
+		value = val;
+	}
 };
 
 template <class T>

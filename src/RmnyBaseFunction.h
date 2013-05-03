@@ -21,6 +21,7 @@ public:
 
 	RmnyVariableBase*	ret;
 	RmnyArgType			getArgType(int argNum);
+	string				format;
 	int					getArgNum();
 
 

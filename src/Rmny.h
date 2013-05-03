@@ -10,5 +10,6 @@
 #define Rmny_Rmny_h
 
 #include "RmnyProjectData.h"
+#include "RmnyScriptPanelWindow.h"
 
 #endif

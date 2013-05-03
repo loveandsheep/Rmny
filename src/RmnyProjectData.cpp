@@ -9,8 +9,8 @@
 #include "RmnyProjectData.h"
 
 void RmnyProjectData::Init(){
-//	keyPressed.addArgument(new RmnyVariable<char>("key"));
-//	keyReleased.addArgument(new RmnyVariable<char>("key"));
+	keyPressed.addArgument(new RmnyVariable<char>("key"));
+	keyReleased.addArgument(new RmnyVariable<char>("key"));
 
 	addVariable(new RmnyVariable<int>("circle_red"));
 	addVariable(new RmnyVariable<int>("circle_blue"));
@@ -35,6 +35,8 @@ void RmnyProjectData::Init(){
 	draw.setArgument(dynamic_cast<RmnyVariable<float>*>(variables[3]), 1, 0);
 	draw.setArgument(dynamic_cast<RmnyVariable<float>*>(variables[4]), 1, 1);
 	draw.setArgument(dynamic_cast<RmnyVariable<float>*>(variables[5]), 1, 2);
+
+
 }
 
 void RmnyProjectData::do_setup(){
