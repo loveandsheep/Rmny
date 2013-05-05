@@ -12,21 +12,16 @@
 #include "ofMain.h"
 #include "RmnySubRoutine.h"
 #include "RmnyScriptCellViewer.h"
+#include "RmnyWindowBase.h"
 
 /*サブルーチンを編集するためのウィンドウ*/
-class RmnyScriptPanelWindow{
+class RmnyScriptPanelWindow : public RmnyWindowBase{
 public:
 
 	RmnyScriptCellViewer	viewer;
 	RmnySubRoutine*			script;
-
-
-	ofRectangle				window;
-	ofFbo					buffer;
-
-	ofTrueTypeFont *helvetica;
 	
-	void setup(int x,int y,int w,int h);
+	void setup(int x, int y, int w, int h, ofTrueTypeFont *font_, string winTitle);
 	void reflesh();
 	void update();
 	void draw();

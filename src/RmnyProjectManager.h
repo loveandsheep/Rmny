@@ -12,6 +12,7 @@
 #include "RmnyDefines.h"
 #include "RmnyScriptPanelWindow.h"
 #include "RmnySelectWindow.h"
+#include "RmnyApplicationWindow.h"
 #include "RmnyProjectData.h"
 
 /* [RmnyProjectManager]
@@ -25,10 +26,13 @@ public:
 
 	RmnyProjectData pjData;
 	string message;
-	
+
+	RmnySelectWindow newBoxWin;
+	RmnySelectWindow controlWindow;
+	RmnySelectWindow variableBoxWin;
 	deque<RmnyScriptPanelWindow*> panels;
 
-	RmnySelectWindow win;
+	RmnyApplicationWindow appWin;
 
 	ofTrueTypeFont Helvetica;
 
@@ -37,6 +41,8 @@ public:
 	void draw();
 
 	void createNewPjData(string file = "");
+
+	void registerEditBox();
 };
 
 #endif /* defined(__Rmny__RmnyProjectManager__) */

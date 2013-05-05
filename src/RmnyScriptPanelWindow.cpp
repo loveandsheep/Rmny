@@ -8,11 +8,10 @@
 
 #include "RmnyScriptPanelWindow.h"
 
-void RmnyScriptPanelWindow::setup(int x, int y, int w, int h){
-	window.set(x, y, w, h);
+void RmnyScriptPanelWindow::setup(int x, int y, int w, int h, ofTrueTypeFont *font_, string winTitle){
+	setupBasis(x, y, w, h, font_, winTitle);
 
-	buffer.allocate(w, h);
-	viewer.setup(ofPoint(w,h),ofPoint(w,50));
+	viewer.setup(ofPoint(w,h),ofPoint(w,30));
 
 }
 
@@ -21,17 +20,20 @@ void RmnyScriptPanelWindow::update(){
 }
 
 void RmnyScriptPanelWindow::draw(){
-	buffer.begin();
-	ofClear(254, 266, 212);
+	win.begin();
+	ofColor c = RMNY_PALETTE_CREAM_SHADE;
+	c.a = 30;
+	ofClear(c);
 	viewer.draw();
 	ofSetColor(220,220,220);
-	for (int i = 0;i < window.height;i+=viewer.glidSize.y){
-		ofLine(0, i, window.width, i);
+	for (int i = 0;i < win.getHeight();i+=viewer.glidSize.y){
+		ofLine(0, i, win.getWidth(), i);
 	}
-	buffer.end();
+	win.end();
 
 	ofSetColor(255);
-	buffer.draw(window.x,window.y);
+
+	drawUIBasis();
 }
 
 void RmnyScriptPanelWindow::reflesh(){
@@ -45,7 +47,7 @@ void RmnyScriptPanelWindow::reflesh(){
 	for (int i = 0;i < script->functions.size();i++){
 		RmnyScriptBoxFunction* scr = new RmnyScriptBoxFunction();
 		scr->function = script->functions[i];
-		scr->font = helvetica;
+		scr->font = font;
 		viewer.scriptBoxes.push_back(scr);
 	}
 }

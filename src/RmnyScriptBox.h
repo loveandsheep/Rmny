@@ -10,6 +10,7 @@
 #define __Rmny__RmnyScriptBox__
 
 #include "ofMain.h"
+#include "RmnyDefines.h"
 #include "RmnyBaseFunction.h"
 #include "RmnyScriptBox.h"
 

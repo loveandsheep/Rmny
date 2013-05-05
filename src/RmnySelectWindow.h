@@ -9,8 +9,7 @@
 #ifndef __Rmny__RmnySelectWindow__
 #define __Rmny__RmnySelectWindow__
 
-#include "ofMain.h"
-#include "RmnyDefines.h"
+#include "RmnyWindowBase.h"
 
 struct Rmny_Selector{
 	Rmny_Selector* parent;
@@ -19,18 +18,18 @@ struct Rmny_Selector{
 	bool isChild;
 	bool isLayer;
 	ofColor color;
+	ofColor color_shade;
+	ofColor color_bright;
 };
 
-class RmnySelectWindow{
+class RmnySelectWindow : public RmnyWindowBase{
 public:
-	ofTrueTypeFont* font;
-	ofFbo win;
 
 	void setup(int x,int y,int w,int h,ofTrueTypeFont* font_,string winTitle);
 	void update();
 	void draw();
 	void drawSelector(int x,int y,Rmny_Selector* sl);
-	void registerSelector(ofColor col,string name,string parent = "Root");
+	void registerSelector(ofColor col,ofColor shade,ofColor bright,string name,string parent = "Root");
 
 	void mouseMoved(ofMouseEventArgs &arg);
 	void mousePressed(ofMouseEventArgs &arg);
@@ -39,22 +38,18 @@ public:
 
 	Rmny_Selector* searchSelector(deque<Rmny_Selector*>* target, string name);
 
-	bool			catchWindow;
-	bool			catchSizeWindow;
 	bool			isTransform;
 	float			trans_slider;
 	int				focus;
 	int				glid_h;
-	string			window_title;
-
+	
 	Rmny_Selector*	transitionLayer;
 	Rmny_Selector*	currentLayer;
 	
 	Rmny_Selector	selectors;
-	ofRectangle		rect;
 
-	bool			isMinimum;
-	int				minimumHeight;
 };
+
+
 
 #endif /* defined(__Rmny__RmnySelectWindow__) */

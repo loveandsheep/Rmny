@@ -9,12 +9,8 @@
 #include "RmnySelectWindow.h"
 
 void RmnySelectWindow::setup(int x, int y, int w, int h,ofTrueTypeFont* font_,string winTitle){
-	window_title = winTitle;
-	font = font_;
-	rect.set(x, y, w, h);
-	win.allocate(w,h);
-	catchWindow = false;
-	catchSizeWindow = false;
+
+	setupBasis(x, y, w, h, font_, winTitle);
 
 	selectors.label = "Root";
 	selectors.isLayer = true;
@@ -22,16 +18,11 @@ void RmnySelectWindow::setup(int x, int y, int w, int h,ofTrueTypeFont* font_,st
 	selectors.parent = NULL;
 	currentLayer = &selectors;
 
-	ofAddListener(ofEvents().mouseMoved, this, &RmnySelectWindow::mouseMoved);
-	ofAddListener(ofEvents().mousePressed, this, &RmnySelectWindow::mousePressed);
-	ofAddListener(ofEvents().mouseDragged, this, &RmnySelectWindow::mouseDragged);
-	ofAddListener(ofEvents().mouseReleased, this, &RmnySelectWindow::mouseReleased);
-	isTransform = false;
 	glid_h = 20;
 	focus = -1;
 
-	isMinimum = false;
-	minimumHeight = rect.height;
+	isTransform = false;
+	scrollY = true;
 }
 
 void RmnySelectWindow::update(){
@@ -45,38 +36,29 @@ void RmnySelectWindow::update(){
 }
 
 void RmnySelectWindow::draw(){
-
+	scrollSize.y = currentLayer->child.size()*glid_h;
+	
 	win.begin();
 	ofColor col = RMNY_PALETTE_CREAM_SHADE;
 	col.a = 100;
 	ofClear(col);
 
 	if (isTransform)
-		drawSelector(trans_slider-(trans_slider > 0 ? 1 : -1)*rect.width,20, transitionLayer);
+		drawSelector(trans_slider-(trans_slider > 0 ? 1 : -1)*rect.width,0-scrollPos.y, transitionLayer);
 
-	drawSelector(trans_slider, 20, currentLayer);
+	drawSelector(trans_slider, 0-scrollPos.y, currentLayer);
 
 	if (focus > -1){
 		ofSetColor(255, 60);
-		ofRect(0,20+focus*glid_h, rect.width, glid_h);
+		ofRect(0,focus*glid_h-scrollPos.y, rect.width, glid_h);
 	}
 
 	win.end();
 
-	if (!isMinimum) minimumHeight += (255			- minimumHeight)/4.0;
-	if ( isMinimum) minimumHeight += (0.0			- minimumHeight)/4.0;
-	if (abs(minimumHeight - 255) < 1.0) minimumHeight = 255;
-	if (abs(minimumHeight - 000) < 1.0) minimumHeight = 0;
-
-	ofSetColor(255, 255, 255,minimumHeight);
-	win.draw(rect.x,rect.y);
+	drawUIBasis();
 
 	glPushMatrix();
-	glTranslated(rect.x, rect.y, 0);
-	ofSetColor(RMNY_PALETTE_CREAM_SHADE);
-	ofFill();
-	ofRect(0, 0, rect.width, 20);
-
+	glTranslatef(rect.x, rect.y-20, 0.0);
 	//バックボタン
 	ofSetColor(RMNY_PALETTE_CREAM_BASE,(currentLayer->parent == NULL) ? 80 : 255);
 	glBegin(GL_TRIANGLE_STRIP);
@@ -84,12 +66,6 @@ void RmnySelectWindow::draw(){
 	glVertex2f(13,  4);
 	glVertex2f(13, 16);
 	glEnd();
-
-	//最小化ボタン
-	ofSetColor(RMNY_PALETTE_CREAM_BASE);
-	glLineWidth(3.0);
-	ofLine(rect.width-18, 10, rect.width-5, 10);
-	glLineWidth(1.0);
 
 	//Parent Label
 	glPushMatrix();
@@ -99,38 +75,7 @@ void RmnySelectWindow::draw(){
 	font->drawString(currentLayer->label,0,0);
 	glPopMatrix();
 
-	glPushMatrix();
-	glTranslatef(rect.width - window_title.length()*8 - 20, 16, 0);
-	glScalef(20.0/48.0*0.5, 20.0/48.0*0.5, 1.0);
-	font->drawString(window_title, 0, 0);
 	glPopMatrix();
-
-
-	//サイズ調整グリッド
-	ofSetColor(RMNY_PALETTE_BLUE_SHADE,minimumHeight);
-	glLineWidth(2.0);
-	ofLine(rect.width,
-			rect.height-15,
-			rect.width -15,
-			rect.height);
-	ofLine(rect.width,
-			rect.height-10,
-			rect.width -10,
-			rect.height);
-	ofLine(rect.width,
-			rect.height-5,
-			rect.width -5,
-			rect.height);
-	glLineWidth(1.0);
-
-	glPopMatrix();
-
-	ofSetColor(RMNY_PALETTE_BLUE_SHADE);
-	if (catchSizeWindow){
-		ofNoFill();
-		ofRect(rect);
-		ofFill();
-	}
 }
 
 void RmnySelectWindow::drawSelector(int x, int y, Rmny_Selector *sl){
@@ -140,7 +85,7 @@ void RmnySelectWindow::drawSelector(int x, int y, Rmny_Selector *sl){
 		glTranslatef(x, y+i*glid_h, 0.0);
 		ofSetColor(sl->child[i]->color);
 		ofRect(0, 0, rect.width, glid_h);
-		ofSetColor(0, 0, 0);
+		ofSetColor(sl->child[i]->color_shade);
 		glTranslatef(3, glid_h*0.9, 0.0);
 		glScalef(glid_h/48.0*0.8, glid_h/48.0*0.8, 1.0);
 		font->drawString(sl->child[i]->label,0,0);
@@ -148,9 +93,11 @@ void RmnySelectWindow::drawSelector(int x, int y, Rmny_Selector *sl){
 	}
 }
 
-void RmnySelectWindow::registerSelector(ofColor col,string name,string parent){
+void RmnySelectWindow::registerSelector(ofColor col,ofColor shade,ofColor bright,string name,string parent){
 	Rmny_Selector* sl = new Rmny_Selector;
 	sl->color = col;
+	sl->color_shade = shade;
+	sl->color_bright = bright;
 	sl->label = name;
 	sl->isLayer = false;
 
@@ -187,9 +134,12 @@ Rmny_Selector* RmnySelectWindow::searchSelector(deque<Rmny_Selector*>* target, s
 
 
 void RmnySelectWindow::mouseMoved(ofMouseEventArgs &arg){
+	mouseMovedBasis(arg);
+	if (minimumHeight < 250) return;
+	
 	if (!isTransform && rect.x < arg.x && arg.x < rect.x+rect.width){
 		for (int i = 0;i < currentLayer->child.size();i++){
-			if (rect.y+20+i*glid_h < arg.y && arg.y < rect.y+20+(i+1)*glid_h){
+			if (rect.y+i*glid_h < (arg.y+scrollPos.y) && (arg.y + scrollPos.y) < rect.y+(i+1)*glid_h){
 				focus = i;
 			}
 		}
@@ -200,32 +150,24 @@ void RmnySelectWindow::mouseMoved(ofMouseEventArgs &arg){
 }
 
 void RmnySelectWindow::mousePressed(ofMouseEventArgs &arg){
-
-	if (ofRectangle(rect.x+rect.width-18,rect.y,13,20).inside(arg.x, arg.y)){
-		isMinimum ^= true;
-	}
-	catchWindow = ofRectangle(rect.x,rect.y,rect.width,20).inside(arg.x, arg.y);
-
-	/*最小化によるマウス操作の無効化*/
+	mousePressedBasis(arg);
 	if (minimumHeight < 250) return;
-
-	catchSizeWindow = ofRectangle(rect.x+rect.width -20,
-								  rect.y+rect.height-20,20,20).inside(arg.x,arg.y);
-
+	
 	int catchSelector = -1;
 	if (currentLayer->parent != NULL){
-		if (ofRectangle(rect.x,rect.y,20,20).inside(arg.x, arg.y)){
+		if (ofRectangle(0,-20,20,20).inside(targetPos)){
 			transitionLayer = currentLayer;
 			Rmny_Selector* cu = currentLayer->parent;
 			currentLayer = cu;
 			trans_slider = -rect.width;
+			scrollPos.y = 0;
 			isTransform = true;
 		}
 	}
 
 	if (!isTransform && rect.x < arg.x && arg.x < rect.x+rect.width){
 		for (int i = 0;i < currentLayer->child.size();i++){
-			if (rect.y+20+i*glid_h < arg.y && arg.y < rect.y+20+(i+1)*glid_h){
+			if (i*glid_h < targetPos.y && targetPos.y < (i+1)*glid_h){
 				catchSelector = i;
 				break;
 			}
@@ -236,33 +178,16 @@ void RmnySelectWindow::mousePressed(ofMouseEventArgs &arg){
 			transitionLayer = currentLayer;
 			currentLayer = currentLayer->child[catchSelector];
 			trans_slider = rect.width;
+			scrollPos.y = 0;
 			isTransform = true;
 		}
 	}
 }
 
 void RmnySelectWindow::mouseDragged(ofMouseEventArgs &arg){
-
-	if (catchWindow){
-		rect.x += arg.x - ofGetPreviousMouseX();
-		rect.y += arg.y - ofGetPreviousMouseY();
-	}
-	
-	if (minimumHeight < 250) return;
-
-	if (catchSizeWindow){
-		rect.width += arg.x - ofGetPreviousMouseX();
-		rect.height += arg.y - ofGetPreviousMouseY();
-		rect.width = MAX(100,rect.width);
-		rect.height = MAX(glid_h+20,rect.height);
-	}
+	mouseDraggedBasis(arg);
 }
 
 void RmnySelectWindow::mouseReleased(ofMouseEventArgs &arg){
-	catchWindow = false;
-
-	if (catchSizeWindow){
-		win.allocate(rect.width, rect.height);
-		catchSizeWindow = false;
-	}
+	mouseReleasedBasis(arg);
 }
