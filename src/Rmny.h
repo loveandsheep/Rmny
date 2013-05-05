@@ -9,7 +9,6 @@
 #ifndef Rmny_Rmny_h
 #define Rmny_Rmny_h
 
-#include "RmnyProjectData.h"
-#include "RmnyScriptPanelWindow.h"
+#include "RmnyProjectManager.h"
 
 #endif

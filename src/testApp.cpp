@@ -3,19 +3,21 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofSetFrameRate(60);
-	rmnyTest.Init();
+	ofEnableAlphaBlending();
 
-	rmnyTest.do_setup();
+	Rmny.setup();
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-	rmnyTest.do_update();
+	Rmny.update();
+
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	rmnyTest.do_draw();
+	Rmny.draw();
+	
 }
 
 //--------------------------------------------------------------

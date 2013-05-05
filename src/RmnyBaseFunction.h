@@ -22,6 +22,7 @@ public:
 	RmnyVariableBase*	ret;
 	RmnyArgType			getArgType(int argNum);
 	string				format;
+	string				Label;
 	int					getArgNum();
 
 
@@ -63,7 +64,8 @@ public:
 		arguments.push_back(new RmnyVariable<int>("targetRate"));
 
 		//If function is not void, define return valuetype.
-		
+
+		Label = "ofSetFrameRate";
 	}
 
 	//Execute function.
@@ -80,7 +82,8 @@ public:
 
 		//Add arguments to arguments array.
 		arguments.push_back(new RmnyVariable<bool>("fullscreen"));
-		
+
+		Label = "ofSetFullscreen";
 	}
 
 	virtual void doFunction(){
@@ -98,6 +101,8 @@ public:
 		arguments.push_back(new RmnyVariable<int>("Red"));
 		arguments.push_back(new RmnyVariable<int>("Blue"));
 		arguments.push_back(new RmnyVariable<int>("Green"));
+
+		Label = "ofSetColor";
 	}
 
 	virtual void doFunction(){
@@ -117,6 +122,7 @@ public:
 		arguments.push_back(new RmnyVariable<float>("y"));
 		arguments.push_back(new RmnyVariable<float>("radius"));
 
+		Label = "ofSetCircle";
 	}
 	virtual void doFunction(){
 		ofCircle((dynamic_cast<RmnyVariable<float>*>(arguments[0])->value),

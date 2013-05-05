@@ -15,7 +15,7 @@
 class RmnyScriptCellViewer{
 public:
 
-	void setup();
+	void setup(ofPoint winSize,ofPoint gliSize);
 	void update();
 	void draw();
 

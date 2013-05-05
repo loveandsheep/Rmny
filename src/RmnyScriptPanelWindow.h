@@ -10,15 +10,24 @@
 #define __Rmny__RmnyScriptPanelWindow__
 
 #include "ofMain.h"
-#include "Rmny.h"
+#include "RmnySubRoutine.h"
 #include "RmnyScriptCellViewer.h"
 
+/*サブルーチンを編集するためのウィンドウ*/
 class RmnyScriptPanelWindow{
 public:
-	RmnySubRoutine* script;
-	RmnyScriptCellViewer viewer;
 
-	void setup();
+	RmnyScriptCellViewer	viewer;
+	RmnySubRoutine*			script;
+
+
+	ofRectangle				window;
+	ofFbo					buffer;
+
+	ofTrueTypeFont *helvetica;
+	
+	void setup(int x,int y,int w,int h);
+	void reflesh();
 	void update();
 	void draw();
 };

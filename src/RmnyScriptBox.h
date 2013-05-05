@@ -27,15 +27,18 @@ enum RmnyOutLetType{
 
 class RmnyScriptBoxBase{
 public:
-	virtual void draw(int x,int y,int space_w,int space_h);
+	virtual void draw(int x,int y,int space_w,int space_h){};
 	void drawBase(int x,int y,int w,int h);
 
 
-	void setColor(int r,int g,int b);
-	void setColor(ofColor color);
+	void setColor(int r,int g,int b){};
+	void setColor(ofColor color){};
 
 	ofColor baseColor;
+	ofColor shadeColor;
+	ofColor hilightColor;
 	ofColor currentColor;
+	ofTrueTypeFont *font;
 };
 
 /*関数を表現するスクリプトボックス*/
@@ -43,6 +46,8 @@ class RmnyScriptBoxFunction : public RmnyScriptBoxBase{
 public:
 	RmnyScriptBoxFunction(){
 		baseColor.set(227,140,140);
+		shadeColor.set(104,53,53);
+		hilightColor.set(255,202,202);
 		currentColor.set(227,140,140);
 	}
 	

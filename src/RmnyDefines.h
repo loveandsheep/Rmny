@@ -1,0 +1,37 @@
+//
+//  RmnyDefines.h
+//  Rmny
+//
+//  Created by Ovis aries on 2013/05/04.
+//
+//
+
+#ifndef Rmny_RmnyDefines_h
+#define Rmny_RmnyDefines_h
+
+#define RMNY_PALETTE_RED_BASE ofColor(227,140,140)
+#define RMNY_PALETTE_RED_SHADE ofColor(104,53,53)
+#define RMNY_PALETTE_RED_BRIGHT ofColor(255,202,202)
+
+#define RMNY_PALETTE_GREEN_BASE ofColor(112,211,169)
+#define RMNY_PALETTE_GREEN_SHADE ofColor(43,84,65)
+#define RMNY_PALETTE_GREEN_BRIGHT ofColor(164,237,200)
+
+#define RMNY_PALETTE_BLUE_BASE ofColor(154,152,244)
+#define RMNY_PALETTE_BLUE_SHADE ofColor(58,52,102)
+#define RMNY_PALETTE_BLUE_BRIGHT ofColor(207,207,255)
+
+#define RMNY_PALETTE_PURPLE_BASE ofColor(237,175,239)
+#define RMNY_PALETTE_PURPLE_SHADE ofColor(93,46,96)
+#define RMNY_PALETTE_PURPLE_BRIGHT ofColor(244,213,247)
+
+#define RMNY_PALETTE_YELLOW_BASE ofColor(219,212,130)
+#define RMNY_PALETTE_YELLOW_SHADE ofColor(94,91,46)
+#define RMNY_PALETTE_YELLOW_BRIGHT ofColor(254,246,210)
+
+#define RMNY_PALETTE_CREAM_BASE ofColor(254,246,210)
+#define RMNY_PALETTE_CREAM_SHADE ofColor(141,132,99)
+#define RMNY_PALETTE_CREAM_BRIGHT ofColor(255,255,255)
+
+
+#endif
